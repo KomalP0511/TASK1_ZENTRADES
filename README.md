@@ -1,1 +1,2 @@
 # TASK1_ZENTRADES
+![image](https://github.com/KomalP0511/TASK1_ZENTRADES/assets/122306935/55f89803-7f3b-43fe-838a-0586003c006a)
