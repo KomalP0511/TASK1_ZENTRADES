@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Display</title>
+</head>
+
+<body>
+    <div id="productList"></div>
+
+    <script>
+        // Function to fetch JSON data from a URL using Fetch API
+        async function fetchJsonData(url) {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch data. Status code: ${response.status}`);
+            }
+            return response.json();
+        }
+
+        // Function to display product data based on specified criteria
+        function displayProductData(products) {
+            // Convert the products object to an array
+            const productsArray = Object.values(products);
+
+            // Sort products based on popularity
+            const sortedProducts = productsArray.sort((a, b) => parseInt(b.popularity) - parseInt(a.popularity));
+
+            const productListDiv = document.getElementById("productList");
+            productListDiv.innerHTML = "<h2>Product List</h2>";
+
+            const table = document.createElement("table");
+            table.innerHTML = `
+        <tr>
+          <th>Title</th>
+          <th>Price</th>
+          <th>Popularity</th>
+        </tr>
+      `;
+
+            sortedProducts.forEach(product => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+          <td>${product.title}</td>
+          <td>${product.price}</td>
+          <td>${product.popularity}</td>
+        `;
+                table.appendChild(row);
+            });
+
+            productListDiv.appendChild(table);
+        }
+
+        // Main function
+        async function main() {
+            // Prompt the user for the JSON file URL
+            const jsonUrl = "https://s3.amazonaws.com/open-to-cors/assignment.json";
+
+            try {
+                const jsonData = await fetchJsonData(jsonUrl);
+                const products = jsonData.products;
+                displayProductData(products);
+            } catch (error) {
+                console.error(`Error: ${error.message}`);
+            }
+        }
+
+        // Run the main function when the page is loaded
+        document.addEventListener("DOMContentLoaded", main);
+    </script>
+</body>
+
+</html>
